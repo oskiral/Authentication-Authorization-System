@@ -1,9 +1,11 @@
+import { env } from "./config/env";
 import express from 'express';
+import { authRouter } from './modules/auth';
 
-export const app = express();
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-app.get('/health', (req, res) => {
-    res.json({status : "ok"});
-});
+app.use("/auth", authRouter(env.JWT_SECRET));
+
+export { app };

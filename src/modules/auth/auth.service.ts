@@ -20,14 +20,14 @@ export class AuthService {
         const user = await this.userService.getUserAuthDataByEmail(email);
 
         if (!user) {
-            throw new Error("Invalid data");
+            throw new Error("Invalid credentials");
         }
 
         // check if password is valid
         const isPasswordValid = bcrypt.compare(password, user.passwordHash);
 
         if (!isPasswordValid) {
-            throw new Error("Invalid data");
+            throw new Error("Invalid credentials");
         }
 
         // generate access token
