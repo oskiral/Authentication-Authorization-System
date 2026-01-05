@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { UserService } from "../user";
-import { LoginInput, AuthResult } from "./auth.types";
+import { LoginInput, AuthResult, RegisterInput } from "./auth.types";
 
 // auth service
 export class AuthService {
@@ -44,4 +44,25 @@ export class AuthService {
 
         return {accessToken}
     }
+
+    // register
+    async register(input: RegisterInput) {
+        const { email, password} = input;
+
+        const existingUser = await this.userService.getUserByEmail(email);
+        if (existingUser) {
+            throw new Error("EMAIL_TAKEN");
+        };
+
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        // create user
+        const user = await this.userService.createUser({
+            email,
+            passwordHash,
+            permissions: 0,
+        });
+
+        return user;
+    };
 };

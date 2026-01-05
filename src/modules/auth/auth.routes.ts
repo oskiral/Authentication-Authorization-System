@@ -13,6 +13,7 @@ export const authRouter = (jwtSecret: string) => {
 
     // login route
     router.post("/login", authController.login);
+    router.post("/register", authController.register);
 
     return router;
 };
