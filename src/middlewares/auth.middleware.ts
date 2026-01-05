@@ -1,0 +1,38 @@
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+
+type JwtPayload = {
+    userId: string,
+    permissions: number
+};
+
+export const AuthMiddleware = (jwtSecret: string) => 
+    (req : Request, res : Response, next : NextFunction) => {
+
+        const header = req.headers.authorization;
+
+        if (!header) {
+            return res.status(401).json({message : "Missing Authorization header"});
+        };
+
+        const [type, token] = header.split(" ");
+
+        if (type !== "Bearer" || !token) {
+            return res.status(401).json({ message: "Invalid Authorization format" });
+        };
+
+        try {
+            const payload = jwt.verify(token, jwtSecret) as JwtPayload;
+
+            req.user = {
+
+                id: payload.userId,
+                permissions: payload.permissions,
+            };
+
+            next();
+
+        } catch {
+            return res.status(401).json({ message: "Invalid or expired token"});
+        };
+};
