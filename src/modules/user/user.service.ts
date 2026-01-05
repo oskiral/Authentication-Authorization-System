@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma"
-import { CreateUserInput, UserDTO } from "./user.types"
+import { CreateUserInput, UserDTO, UserAuthData } from "./user.types"
 
 // user service
 export class UserService {
@@ -46,4 +46,17 @@ export class UserService {
             createdAt: user.createdAt,
         };
     };
+
+    async getUserAuthDataByEmail(email: string): Promise<UserAuthData | null> {
+        return prisma.user.findUnique({
+            where: { email },
+            select: {
+                id: true,
+                email: true,
+                passwordHash: true,
+                permissions: true,
+            },
+        });
+    }
+
 };

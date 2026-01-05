@@ -13,3 +13,11 @@ export interface UserDTO {
     permissions: number;
     createdAt: Date;
 };
+
+// interface used by AuthService in order to fetch password 
+export interface UserAuthData {
+  id: string;
+  email: string;
+  passwordHash: string;
+  permissions: number;
+}
