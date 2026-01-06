@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userService } from "./user.service";
 
+// /me endpoint logic
 export const getMe = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -14,3 +15,14 @@ export const getMe = async (req: Request, res: Response) => {
 
   return res.json(user);
 };
+
+// i use this endpoint to test permission feature
+export const getAdminHello = async (req: Request, res: Response) => {
+        
+        const adminId = req.user?.id;
+
+        return res.status(200).json({
+            message: "Hello Admin!",
+            details: `You are logged in as user ${adminId} with full admin privileges.`
+        });
+    };
