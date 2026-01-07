@@ -53,7 +53,7 @@ export class AuthController {
         };
     };
 
-    // refresh auth tokens
+    // refresh auth tokens endpoint
     refresh = async (req: Request, res: Response) => {
         try {
 
@@ -70,5 +70,26 @@ export class AuthController {
         } catch (err) {
             return res.status(401).json({message: "Session expired"})
         }
+    };
+
+    // logout endpoint
+    logout = async (req: Request, res: Response) => {
+        try {
+
+            const {refreshToken} = req.body;
+    
+            if (!refreshToken) {
+                return res.status(400).json({message: "Missing refresh token"});
+            };
+
+            await this.authService.logout(refreshToken);
+
+            return res.status(204).send();
+
+        } catch(err) {
+            return res.status(500).json({message: "Internal server error"});
+        };
+
+
     };
 };

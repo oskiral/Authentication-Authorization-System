@@ -5,6 +5,8 @@ Centralized authentication and authorization backend.
 ## Key Features
 
 - **Authentication**: Secure login/register flow using JWT (JSON Web Tokens).
+- **Refresh Token Rotation**: Enhanced security with single-use refresh tokens to prevent replay attacks.
+- **Session Management**: Full control over user sessions, including secure logout and token invalidation in the database.
 - **Bitmask Authorization**: High-performance permission system using bitwise operations.
 - **Modular Architecture**: Clean separation between Auth and User modules (Controllers, Services, Routers).
 - **TypeScript**: Full type safety for requests and user payloads.

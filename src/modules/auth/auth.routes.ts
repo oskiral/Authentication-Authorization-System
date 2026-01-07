@@ -17,6 +17,7 @@ export const authRouter = (jwtAcccessSecret: string, jwtRefreshSecret : string) 
     router.post("/login", authController.login);
     router.post("/register", authController.register);
     router.post("/refresh", authController.refresh);
+    router.post('/logout', authController.logout);
 
     return router;
 };

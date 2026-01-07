@@ -84,4 +84,11 @@ export class AuthService {
             refreshToken
         };
     };
+
+    // logout
+    async logout(refreshToken: string) : Promise<void> {
+        try {
+            await this.tokenService.deleteRefreshToken(refreshToken);
+        } catch (err) {};
+    };
 };
