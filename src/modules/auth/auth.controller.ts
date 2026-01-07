@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
+import { TokenService } from "./token.service";
 
 // auth controller
 export class AuthController {
 
-    constructor ( private readonly authService: AuthService) {};
+    constructor (
+        private readonly authService: AuthService,
+        private readonly tokenService: TokenService
+    ) {};
 
     // login endpoint
     login = async (req: Request, res: Response) => {
@@ -48,6 +52,33 @@ export class AuthController {
             }
 
             return res.status(500).json({ message: "Internal server error" });
+        };
+    };
+
+    refresh = async (req: Request, res: Response) => {
+        try {
+
+            const {refreshToken} = req.body;
+    
+            if (!refreshToken) {
+                return res.status(401).json({message: "No refresh token provided"});
+            };
+    
+            const payload = await this.tokenService.validateRefreshToken(refreshToken);
+    
+            if (!payload) {
+                return res.status(401).json({message: "Invalid or expired refresh token"});
+            };
+    
+            const newAccessToken = this.tokenService.generateAccessToken(payload.id);
+    
+            // TODO TOKEN ROTATION
+    
+            return res.json({
+                accessToken: newAccessToken
+            });
+        } catch (err) {
+            return res.status(500).json({message: "Internal server error"})
         }
     };
 };

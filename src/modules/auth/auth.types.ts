@@ -11,7 +11,21 @@ export interface RegisterInput {
   password: string;
 };
 
-// access token given by server
+// user data
+export interface UserBasicInfo {
+  id: string;
+  email: string;
+  permissions: number;
+}
+
+// result of authentication
 export interface AuthResult {
   accessToken: string;
-};
+  refreshToken: string;
+  user: UserBasicInfo;  
+}
+
+// token payload
+export interface TokenPayload {
+  id: string;
+}

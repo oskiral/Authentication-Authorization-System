@@ -1,15 +1,14 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-
-import { UserService } from "../user";
+import { UserDTO, UserService } from "../user";
 import { LoginInput, AuthResult, RegisterInput } from "./auth.types";
+import { TokenService } from "./token.service";
 
 // auth service
 export class AuthService {
     
     constructor (
         private readonly userService : UserService,
-        private readonly jwtSecret : string
+        private readonly tokenService : TokenService
     ) {};
 
     // login
@@ -30,23 +29,23 @@ export class AuthService {
             throw new Error("Invalid credentials");
         }
 
-        // generate access token
-        const accessToken = jwt.sign(
-            {
-                userId: user.id,
-                permissions: user.permissions
-            },
-            this.jwtSecret,
-            {
-                expiresIn: "15m"
-            }
-        )
+        // generate access and refresh tokens
+        const accessToken = this.tokenService.generateAccessToken(user.id);
+        const refreshToken = await this.tokenService.generateRefreshToken(user.id);
 
-        return {accessToken}
+        return {
+            accessToken,
+            refreshToken,
+            user : {
+                id: user.id,
+                email: user.email,
+                permissions: user.permissions
+            }
+        }
     }
 
     // register
-    async register(input: RegisterInput) {
+    async register(input: RegisterInput) : Promise<UserDTO> {
         const { email, password} = input;
 
         const existingUser = await this.userService.getUserByEmail(email);
