@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { UserDTO, UserService } from "../user";
-import { LoginInput, AuthResult, RegisterInput } from "./auth.types";
+import { LoginInput, AuthResult, RegisterInput, AuthTokens } from "./auth.types";
 import { TokenService } from "./token.service";
 
 // auth service
@@ -63,5 +63,25 @@ export class AuthService {
         });
 
         return user;
+    };
+
+    // refresh tokens
+    async refreshTokens(oldRefreshToken: string) : Promise<AuthTokens> {
+        
+        const payload = await this.tokenService.validateRefreshToken(oldRefreshToken);
+
+        if (!payload) {
+            throw new Error("INVALID_TOKEN");
+        };
+
+        await this.tokenService.deleteRefreshToken(oldRefreshToken);
+
+        const accessToken = this.tokenService.generateAccessToken(payload.id);
+        const refreshToken = await this.tokenService.generateRefreshToken(payload.id);
+
+        return {
+            accessToken,
+            refreshToken
+        };
     };
 };

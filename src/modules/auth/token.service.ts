@@ -36,7 +36,7 @@ export class TokenService {
 
         try {
 
-            const payload = jwt.verify(token, this.jwtRefreshSecret) as {id: string};
+            const payload = jwt.verify(token, this.jwtRefreshSecret) as TokenPayload;
 
             const dbToken = await prisma.refreshToken.findUnique({
                 where: {token}

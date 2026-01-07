@@ -29,3 +29,9 @@ export interface AuthResult {
 export interface TokenPayload {
   id: string;
 }
+
+// access token & refresh token
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
