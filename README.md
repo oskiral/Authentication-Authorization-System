@@ -26,3 +26,20 @@ The project uses **Prisma** as an ORM. The user model includes a `permissions` f
 To get started with the database:
 1. Run `npx prisma generate` to create the client.
 2. Run `npx prisma db push` to sync the schema.
+
+# TODO
+
+### Security
+- [ ] **Request Validation (Zod)**
+- [ ] **Password Strength Validation**
+- [ ] **Rate Limiting**
+- [ ] **Account Locking**
+- [ ] **Reuse Detection**
+
+### Reliability
+- [ ] **Global Error Handler**
+- [ ] **Professional Logger**
+- [ ] **Database health Endpoint**
+
+### Documentation
+- [ ] **Swagger**
